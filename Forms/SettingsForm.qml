@@ -206,6 +206,7 @@ Rectangle {
             anchors.top: frame1.top
             onClicked:{
                 updateSettings()
+                appWindow.sendLogin()
             }
         }
 
@@ -219,6 +220,7 @@ Rectangle {
             onClicked: mainWindow.setMainWindowState("ListChooserWindow")
 
         }
+
     }
 }
 

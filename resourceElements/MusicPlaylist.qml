@@ -53,7 +53,7 @@ JSONListModel {
     }
 
     function getCurrentTrackPath() {
-        return getCurrentSongObject()["filepath"]
+        return encodeURIComponent(getCurrentSongObject()["filepath"])
     }
 
     function getCurrentTrackMetadata() {

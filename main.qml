@@ -77,7 +77,10 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: toolBar.bottom
-        Component.onCompleted: sendLogin()
+        Component.onCompleted: {
+            if(  getSetupState() )
+                sendLogin()
+        }
         property alias mainApp: appWindow
         listStackView.onDepthChanged: toolButton.refreshText()     // for some reason, text refresh seems unreliable
     }
@@ -124,7 +127,7 @@ ApplicationWindow {
     property bool isPlaying: false
     property int playlistAddAt: 0
 
-    property int globalDebugLevel: 0        // 0 = critical, 1 = warn, 2 = all
+    property int globalDebugLevel: 2        // 0 = critical, 1 = warn, 2 = all
 
     property alias currentPlayList: _currentPlayList
     property alias toolBarLabel: _toolBarLabel

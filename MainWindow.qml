@@ -103,9 +103,9 @@ Item {
     SettingsForm {
         id: settingsForm
         visible: false
-        scale: 0.0
         anchors.fill: parent
         //        property alias appSettings: _appSettings
+        onVisibleChanged: {myLogger.log("Settings Visibility", visible) }
     }
 
     Timer {
@@ -278,7 +278,7 @@ Item {
                     navFrame.visible = false
                     settingsForm.visible = true
                     listChooser.visible = false
-                    myLogger.log("Setup Done***********")
+                    myLogger.log("Setup Done***********", settingsForm.visible)
                 }
             }
         },
@@ -297,7 +297,7 @@ Item {
                     navFrame.visible = false
                     settingsForm.visible = false
                     listChooser.visible = false
-                    myLogger.log("Setup Done***********")
+                    myLogger.log("Initializing Done***********")
                 }
             }
         }
@@ -321,6 +321,10 @@ Item {
 
     function getToken() {
         return appWindow.myToken
+    }
+
+    function getSetupState() {
+        return appSettings.setIsSetup
     }
 
     Component.onCompleted: testTimer.start()
