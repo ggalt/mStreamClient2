@@ -75,6 +75,9 @@ Item {
                 anchors.fill: parent
                 visible: true
                 clip: true
+                initialItem: Rectangle {
+                    anchors.fill: parent
+                }
             }
         }
 

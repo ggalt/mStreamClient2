@@ -114,15 +114,15 @@ Item {
             shadowVertOffset: 4
             shadowHorzOffset: 4
             hasLabel: false
-            imageSource: "../images/pause.png"
-            untoggledSource: "../images/pause.png"
-            toggledSource: "../images/play.png"
+            imageSource: "../images/play.png"
+            untoggledSource: "../images/play.png"
+            toggledSource: "../images/pause.png"
             hasToggledSource: true
 
             hoverEnabled: true
             ToolTip.visible: containsMouse
             ToolTip.delay: toolTipDelay
-            ToolTip.text: checked ? qsTr("Play") : qsTr("Pause")
+            ToolTip.text: checked ? qsTr("Pause") : qsTr("Play")
 
             onClicked: {
                 myLogger.log("Play/Pause pressed.  Currently checked is:", checked)

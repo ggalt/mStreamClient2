@@ -25,24 +25,31 @@ ApplicationWindow {
 
         ToolButton {
             id: toolButton
-            text: mainWindow.listStackView.empty ? "\u2630" : "\u25C0"
-            //            text: stackView.depth > 1 ? "\u25C0" : "\u2630"
+            text: mainWindow.listStackView.depth <=1 ? "\u2630" : "\u25C0"
             font.pointSize: 18
 
             function refreshText() {
-                text=mainWindow.listStackView.empty ? "\u2630" : "\u25C0"
+                text=mainWindow.listStackView.depth <=1 ? "\u2630" : "\u25C0"
             }
 
             onClicked: {
                 if (mainWindow.listStackView.depth > 1) {
-                    mainWindow.listStackView.pop()
-                    myLogger.log("listStackView depth:", mainWindow.listStackView.depth)
-                } else if(mainWindow.listStackView.depth===1) {
-                    mainWindow.listStackView.clear(StackView.PopTransition)
-                    myLogger.log("listStackView depth:", mainWindow.listStackView.depth)
-                    myLogger.log("listStackView empty:", mainWindow.listStackView.empty)
-                    mainWindow.state="ListChooserWindow"
+                    myLogger.log("listStackView depth before:", mainWindow.listStackView.depth)
+                    var item = mainWindow.listStackView.pop()
+                    appWindow.poppedItems.push(item.objectName)
+                    myLogger.log("listStackView depth after:", mainWindow.listStackView.depth)
+                    myLogger.log("form name:", item.objectName)
+                    console.log("poppedItems:", appWindow.poppedItems)
+
+                    if(mainWindow.listStackView.depth === 1)
+                        mainWindow.state="ListChooserWindow"
+
+                    if(nowPlayingTimer.running)
+                        nowPlayingTimer.restart()
+                    else
+                        nowPlayingTimer.start()
                 } else {
+                    // enter setup
                     myLogger.log("listStackView depth:", mainWindow.listStackView.depth)
                     myLogger.log("listStackView empty:", mainWindow.listStackView.empty)
                 }
@@ -63,11 +70,27 @@ ApplicationWindow {
     }
 
     Timer {
-        id: nowPlayingTimer
-        interval: 3000
+        id: _nowPlayingTimer
+        interval: 5000
         running: false
         onTriggered: {
-            myLogger.log("return to Now Playing")
+            myLogger.log("return to Now Playing", mainWindow.listStackView.depth, mainWindow.listStackView.index, currentPlayList.count)
+            console.log("poppedItems before push:", appWindow.poppedItems)
+            mainWindow.setMainWindowState("NowPlaying")
+            while( appWindow.poppedItems.length > 0 ) {
+                var item = appWindow.poppedItems.pop()
+                myLogger.log("popped item:", item)
+                if(item === "playlistForm") {
+                    mainWindow.listStackView.push( "qrc:/Forms/PlayListForm.qml" )
+                } else if(item === "albumPage") {
+                    mainWindow.listStackView.push( "qrc:/Forms/AlbumListForm.qml" )
+                } else if(item === "artistPage") {
+                    mainWindow.listStackView.push( "qrc:/Forms/ArtistListForm.qml" )
+                } else if(item === "managedPlaylist") {
+                    myLogger.log("managedPlaylist")
+                }
+            }
+            appWindow.poppedItems = []
         }
     }
 
@@ -129,8 +152,11 @@ ApplicationWindow {
 
     property int globalDebugLevel: 2        // 0 = critical, 1 = warn, 2 = all
 
+    property var poppedItems: []
+
     property alias currentPlayList: _currentPlayList
     property alias toolBarLabel: _toolBarLabel
+    property alias nowPlayingTimer: _nowPlayingTimer
 
     /////////////////////////////////////////////////////////////////////////////////
     /// Functions
@@ -233,6 +259,11 @@ ApplicationWindow {
     }
 
     function actionClick(action) {
+        if(nowPlayingTimer.running) {
+            nowPlayingTimer.stop()
+            appWindow.poppedItems = []
+        }
+
         if(action === "Artists") {
             myLogger.log("Artist Click")
             requestArtists();
