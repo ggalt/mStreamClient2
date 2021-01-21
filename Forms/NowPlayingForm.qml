@@ -236,6 +236,7 @@ Item {
 
         function startPlaylist() {
             currentPlayList.setCurrentTrack(0)  // make sure we are at the beginning
+            appWindow.hasPlayListLoaded = true
             // setting new track with setCurrentTrack will call "startNewTrack()" below
         }
 
