@@ -53,6 +53,7 @@ JSONListModel {
     }
 
     function getCurrentTrackPath() {
+        myLogger.log("Encoded song file path:", encodeURIComponent(getCurrentSongObject()["filepath"]))
         return encodeURIComponent(getCurrentSongObject()["filepath"])
     }
 
