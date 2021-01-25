@@ -1,6 +1,6 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQml 2.13
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQml 2.15
 import Qt.labs.settings 1.1
 import QtMultimedia 5.12
 import "resourceElements"
@@ -10,8 +10,8 @@ ApplicationWindow {
     objectName: "appWindow"
 
     visible: true
-    width: 800
-    height: 480
+//    width: 800
+//    height: 480
     color: "#c8c8c8"
     title: qsTr("mStreamClient")
 
