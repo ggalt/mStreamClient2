@@ -51,6 +51,11 @@ compile_commands.json
 # QtCreator local machine specific files for imported projects
 *creator.user*
 
+# QtCreator iOS Files
+*plugin_import.cpp
+/.xcode
+Debug-iphonesimulator
+
 # General
 .DS_Store
 .AppleDouble
