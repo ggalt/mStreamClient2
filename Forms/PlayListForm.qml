@@ -9,6 +9,16 @@ ScrollingListView {
     property color delegateBackground: "#80808080"
     property color delegatePressed: "lightgrey"
 
+    myHighLight: highlight
+    myhighlightRangeMode: ListView.NoHighlightRange
+
+    highlightFollowsCurrentItem: true
+
+    function changeTrackIndex( idx ) {
+        playlistForm.myCurrentIndex = idx
+        myLogger.log("New Track number:", idx, "current playlist index:", playlistForm.myCurrentIndex)
+    }
+
     myModel: currentPlayList.plModel
 
     Logger {
@@ -43,13 +53,20 @@ ScrollingListView {
             height: parent.height
             anchors.right: parent.right
 
-            SwipeDelegate.onClicked: {
-                myLogger.log("remove track", listDelegateRect.height, playlistDelegate.height)
-                swipe.close()
-            }
+//            SwipeDelegate.onClicked: {
+//                myLogger.log("remove track", listDelegateRect.height, playlistDelegate.height)
+//                swipe.close()
+//            }
 
             background: Rectangle {
                 color: removeLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        myLogger.log("remove track", listDelegateRect.height, playlistDelegate.height)
+                        swipe.close()
+                    }
+                }
             }
         }
 
@@ -67,5 +84,40 @@ ScrollingListView {
             delegateLabel.text: model.metadata.track+" - "+model.metadata.title
             delegateImage.source: mainWindow.getServerURL()+"/album-art/"+model.metadata["album-art"]+"?token="+mainWindow.getToken()
         }
+    }
+
+    Component {
+        id: highlight
+        Rectangle {
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#4d808000"
+                }
+
+                GradientStop {
+                    position: 0.5
+                    color: "#66ffff00"
+                }
+
+                GradientStop {
+                    position: 1
+                    color: "#4d808000"
+                }
+            }
+            border.width: 2
+            border.color: "yellow"
+            y: playlistForm.myCurrentItem.y
+            Behavior on y {
+                SpringAnimation {
+                    spring: 3
+                    damping: 0.2
+                }
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        currentPlayList.trackChange.connect(changeTrackIndex)
     }
 }

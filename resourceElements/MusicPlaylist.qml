@@ -3,7 +3,8 @@ import QtQuick 2.15
 JSONListModel {
     id: currentPlayListJSONModel
     objectName: "currentPlayListJSONModel"
-    property int currentIndex: 0
+    property int currentStaticIndex: 0      // index to sequential playlist
+    property int currentPlayingIndex: 0     // index to playing playlist, will be the same a static when no shuffle, otherwise reflect shuffelled index
     property alias titleCount: currentPlayListJSONModel.count
     property var playListArray: []  // list of index positions in playlist
     property bool looping: false
@@ -11,7 +12,7 @@ JSONListModel {
     property alias plModel: currentPlayListJSONModel.model
 
     signal endOfList
-    signal trackChange
+    signal trackChange(int idx)
 
     Logger {
         id:myLogger
@@ -37,19 +38,19 @@ JSONListModel {
     }
 
     function setCurrentTrack(trackNum) {
-        currentIndex = trackNum
-        trackChange(currentIndex)
+        currentStaticIndex = trackNum
+        trackChange(getCurrentTrackNumber())
     }
 
     function getCurrentSongObject() {
-        console.assert("Index past end of playlist", currentIndex < titleCount)
-        var idx = playListArray[currentIndex]   // playListArray contains
-        console.assert("Index does not exist", idx < titleCount )
-        return get(idx)
+        return get(getCurrentTrackNumber())
     }
 
     function getCurrentTrackNumber() {
-        return playListArray[currentIndex]
+        console.assert("Index past end of playlist", currentStaticIndex < titleCount)
+        currentPlayingIndex = playListArray[currentStaticIndex]   // playListArray contains
+        console.assert("Index does not exist", currentPlayingIndex < titleCount )
+        return currentPlayingIndex
     }
 
     function getCurrentTrackPath() {
@@ -63,7 +64,7 @@ JSONListModel {
 
     function nextTrackAvailable() {
         myLogger.log("looping status:", looping)
-        if(currentIndex +1 >= titleCount) {
+        if(currentStaticIndex +1 >= titleCount) {
             if(looping) {
                 return true
             } else {
@@ -75,7 +76,7 @@ JSONListModel {
     }
 
     function previousTrackAvailable() {
-        if(currentIndex -1 < 0) {
+        if(currentStaticIndex -1 < 0) {
             if(looping) {
                 return true
             } else {
@@ -87,29 +88,37 @@ JSONListModel {
     }
 
     function getNextTrack() {
-        myLogger.log("current index before add:", currentIndex)
-        currentIndex++
-        if(currentIndex >= titleCount) {
+        currentStaticIndex++
+        if(currentStaticIndex >= titleCount) {
+            currentStaticIndex = 0
+            trackChange(currentStaticIndex)
             if(looping) {
-                currentIndex = 0
+                return true
             } else {
                 endOfList()     // emit signal that we are at the end
+                return false
             }
         }
-        myLogger.log("current index after add:", currentIndex)
-        return getCurrentTrackPath()     // return path of next track
+        trackChange(currentStaticIndex)
+        return true
     }
 
     function getPreviousTrack() {
-        currentIndex--
-        if(currentIndex < 0) {
+        currentStaticIndex--
+        if(currentStaticIndex < 0) {
             if(looping) {
-                currentIndex = titleCount-1
+                currentStaticIndex = titleCount-1
+                trackChange(currentStaticIndex)
+                return true
             } else {
-                currentIndex = 0
+                currentStaticIndex = 0
+                trackChange(currentStaticIndex)
+                endOfList()     // emit signal that we are at the end
+                return false
             }
         }
-        return getCurrentTrackPath()     // return path of previous track
+        trackChange(currentStaticIndex)
+        return true
     }
 
     function addSong(jsonSongObj) {

@@ -52,13 +52,20 @@ ScrollingListView {
             height: parent.height
             anchors.left: parent.left
 
-            SwipeDelegate.onClicked: {
-                myLogger.log("add tracks", listDelegateRect.height, artistDelegate.height)
-                swipe.close()
-            }
+//            SwipeDelegate.onClicked: {
+//                myLogger.log("add tracks", listDelegateRect.height, artistDelegate.height)
+//                swipe.close()
+//            }
 
             background: Rectangle {
                 color: addLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        myLogger.log("add tracks", listDelegateRect.height, artistDelegate.height)
+                        swipe.close()
+                    }
+                }
             }
         }
 
@@ -71,13 +78,20 @@ ScrollingListView {
             height: parent.height
             anchors.right: parent.right
 
-            SwipeDelegate.onClicked: {
-                myLogger.log("replace tracks", listDelegateRect.height, artistDelegate.height)
-                swipe.close()
-            }
+//            SwipeDelegate.onClicked: {
+//                myLogger.log("replace tracks", listDelegateRect.height, artistDelegate.height)
+//                swipe.close()
+//            }
 
             background: Rectangle {
                 color: replaceLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        myLogger.log("replace tracks", listDelegateRect.height, artistDelegate.height)
+                        swipe.close()
+                    }
+                }
             }
         }
 

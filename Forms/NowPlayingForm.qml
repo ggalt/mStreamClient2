@@ -100,6 +100,7 @@ Item {
             onClicked: {
                 myLogger.log("width:", btnRewind.width)
                 ToolTip.hide()
+                mediaPlayer.startPreviousTrack()
             }
         }
 
@@ -237,24 +238,19 @@ Item {
         function startPlaylist() {
             currentPlayList.setCurrentTrack(0)  // make sure we are at the beginning
             appWindow.hasPlayListLoaded = true
-            // setting new track with setCurrentTrack will call "startNewTrack()" below
+            // setting the current track will call startNewTrack()
         }
 
         function startNewTrack() {
-            myLogger.log(appWindow.currentPlayList.getCurrentTrackNumber(), "track path:",appWindow.serverURL+"/media/"+appWindow.currentPlayList.getCurrentTrackPath()+"?token="+appWindow.myToken)
+            myLogger.log("*******",appWindow.currentPlayList.getCurrentTrackNumber(), "track path:",appWindow.serverURL+"/media/"+appWindow.currentPlayList.getCurrentTrackPath()+"?token="+appWindow.myToken)
             _mediaPlayer.source = appWindow.serverURL+"/media/"+appWindow.currentPlayList.getCurrentTrackPath()+"?token="+appWindow.myToken
-            if( !btnPlayOrPause.checked )
-                btnPlayOrPause.checked=true    // trigger a "click" of the pause/play toggle button
+            btnPlayOrPause.checked=true    // trigger a "click" of the pause/play toggle button
             displaySongInfo()
-            //            _mediaPlayer.play()
         }
 
         function startNextTrack() {
-            if(currentPlayList.nextTrackAvailable()) {
-                _mediaPlayer.source = appWindow.serverURL+"/media/"+appWindow.currentPlayList.getNextTrack()+"?token="+appWindow.myToken
-                myLogger.log(appWindow.currentPlayList.getCurrentTrackNumber(), "track path:",appWindow.serverURL+"/media/"+appWindow.currentPlayList.getCurrentTrackPath()+"?token="+appWindow.myToken)
-                _mediaPlayer.play()
-                displaySongInfo()
+            if(appWindow.currentPlayList.getNextTrack()) {
+                startNewTrack()
             } else {
                 isPlaying=false;
                 _mediaPlayer.stop()
@@ -262,10 +258,12 @@ Item {
         }
 
         function startPreviousTrack() {
-            _mediaPlayer.source = appWindow.serverURL+"/media/"+appWindow.currentPlayList.getPreviousTrack()+"?token="+appWindow.myToken
-            myLogger.log(appWindow.currentPlayList.getCurrentTrackNumber(), "track path:",appWindow.serverURL+"/media/"+appWindow.currentPlayList.getCurrentTrackPath()+"?token="+appWindow.myToken)
-            _mediaPlayer.play()
-            displaySongInfo()
+            if(appWindow.currentPlayList.getPreviousTrack()) {
+                startNewTrack()
+            } else {
+                isPlaying=false
+                _mediaPlayer.stop()
+            }
         }
 
         function displaySongInfo() {

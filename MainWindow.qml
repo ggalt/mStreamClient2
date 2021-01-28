@@ -74,20 +74,47 @@ Item {
                 id: listManager
                 anchors.fill: parent
                 visible: true
-                clip: true
+                clip: true      // false if we want drag and drop
                 initialItem: Rectangle {
-                    anchors.fill: parent
+//                    anchors.fill: parent
                 }
             }
         }
 
-        NowPlayingForm {
-            id: _nowPlayingForm
+        // DropArea not currently working, but isn't really in the way
+        DropArea {
+            id: dropArea
+
+            property string delegateDrop
+
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.left: listManagerRect.right
+            z: listManagerRect.z-1
+
+            keys: [delegateDrop]
+            onDropped: {
+                console.log("DROP!!")
+                console.log("DROP!!", drop.source.objectName, drop.source.delegateLabel.text)
+            }
+            NowPlayingForm {
+                id: _nowPlayingForm
+                anchors.fill: parent
+                states: [
+                    State {
+                        when: dropArea.containsDrag
+                        PropertyChanges {
+                            target: _nowPlayingForm
+                            opacity: 0.0
+                        }
+                    }
+                ]
+
+            }
+
         }
+
     }
 
     Settings {

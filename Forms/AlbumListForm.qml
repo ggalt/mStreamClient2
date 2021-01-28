@@ -9,12 +9,79 @@ ScrollingListView {
     formName: "Album List"
     myModel: albumListJSONModel.model
     highlightLetter: myCurrentItem.myData.name[0]
+    clip: false
 
     Logger {
         id:myLogger
         moduleName: parent.objectName
         debugLevel: appWindow.globalDebugLevel
     }
+
+//    myDelegate: ListDelegateRect {
+//        id: albumDelegate
+//        objectName: "albumDelegate"
+//        property variant myData: model
+
+//        //        x: 0
+//        height: 87
+//        width: parent.width
+//        //        anchors.top: parent.top
+//        //        anchors.bottom: parent.bottom
+//        //        anchors.topMargin: 1
+//        //        anchors.bottomMargin: 1
+//        color: "#80808080"
+//        clip: true
+//        hasImage: true
+//        delegateLabel.text: model.name
+//        delegateImage.source: mainWindow.getServerURL()+"/album-art/"+model.album_art_file+"?token="+mainWindow.getToken()
+
+//        property string delegateDrop: "albumDelegate"
+//        Drag.active: delegateMouseArea.drag.active
+//        Drag.keys: [delegateDrop]
+//        states: State {
+//            when: delegateMouseArea.drag.active
+//            ParentChange {
+//                target: albumDelegate
+//                parent: mainWindow.nowPlayingForm
+//            }
+//        }
+
+//        MouseArea {
+//            id: delegateMouseArea
+//            anchors.fill: parent
+//            property bool wasClicked: false
+
+//            onPressed: albumDelegate.color = "lightgrey"
+
+//            onReleased: albumDelegate.color = "#80808080"
+
+//            onClicked: {
+//                albumDelegate.ListView.view.currentIndex=index
+//                myLogger.log("click for:", albumDelegate.delegateLabel.text)
+//                wasClicked=true
+//            }
+
+//            onPressAndHold: {
+//                myLogger.log("Press and hold")
+//                mainApp.updatePlaylist(albumDelegate.delegateLabel.text, "album", "add")
+//            }
+
+//            drag.target: albumDelegate
+//            drag.axis: Drag.XAndYAxis
+//            //            drag.maximumX: albumPage.width
+//            //            drag.maximumY: albumPage.height
+
+//            //            onExited: {
+//            //                if(!wasClicked) {
+//            //                    myLogger.log("exited mouse area while dragging delegate")
+//            //                    mainApp.updatePlaylist(albumDelegate.delegateLabel.text, "album", "replace")
+//            //                } else {
+//            //                    wasClicked = false  // reset value
+//            //                }
+//            //            }
+//        }
+//    }
+
 
     myDelegate: SwipeDelegate {
         id: albumDelegate
@@ -36,7 +103,19 @@ ScrollingListView {
 
         onPressAndHold: {
             myLogger.log("press and hold for replace tracks")
+            mainApp.updatePlaylist(listDelegateRect.delegateLabel.text, "album", "replace")
         }
+
+        //        swipe.onCompleted: {
+        //            if( swipe.leftItem !== null ) {
+        //                mainApp.updatePlaylist(listDelegateRect.delegateLabel.text, "album", "add")
+        //                myLogger.log("swipe left?",swipe.leftItem.visible)
+        //            } else if( swipe.rightItem !== null ) {
+        //                mainApp.updatePlaylist(listDelegateRect.delegateLabel.text, "album", "replace")
+        //                myLogger.log("swipe right?",swipe.rightItem.visible)
+        //            }
+        //            swipe.close()
+        //        }
 
         swipe.left: Label {
             id: addLabel
@@ -47,14 +126,22 @@ ScrollingListView {
             height: parent.height
             anchors.left: parent.left
 
-            SwipeDelegate.onClicked: {
-                myLogger.log("add tracks for", listDelegateRect.delegateLabel.text)
-                mainApp.updatePlaylist(listDelegateRect.delegateLabel.text, "album", "add")
-                swipe.close()
-            }
+            //            SwipeDelegate.onClicked: {
+            //                myLogger.log("add tracks for", listDelegateRect.delegateLabel.text)
+            //                mainApp.updatePlaylist(listDelegateRect.delegateLabel.text, "album", "add")
+            //                swipe.close()
+            //            }
 
             background: Rectangle {
                 color: addLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        myLogger.log("add tracks for", listDelegateRect.delegateLabel.text)
+                        mainApp.updatePlaylist(listDelegateRect.delegateLabel.text, "album", "add")
+                        swipe.close()
+                    }
+                }
             }
         }
 
@@ -67,14 +154,22 @@ ScrollingListView {
             height: parent.height
             anchors.right: parent.right
 
-            SwipeDelegate.onClicked: {
-                myLogger.log("replace tracks", listDelegateRect.height, albumDelegate.height)
-                mainApp.updatePlaylist(albumLabel.text, "album", "replace")
-                swipe.close()
-            }
+            //            SwipeDelegate.onClicked: {
+            //                myLogger.log("replace tracks", listDelegateRect.height, albumDelegate.height)
+            //                mainApp.updatePlaylist(listDelegateRect.delegateLabel.text, "album", "replace")
+            //                swipe.close()
+            //            }
 
             background: Rectangle {
                 color: replaceLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        myLogger.log("replace tracks", listDelegateRect.height, albumDelegate.height)
+                        mainApp.updatePlaylist(listDelegateRect.delegateLabel.text, "album", "replace")
+                        swipe.close()
+                    }
+                }
             }
         }
 
@@ -91,6 +186,10 @@ ScrollingListView {
             hasImage: true
             delegateLabel.text: model.name
             delegateImage.source: mainWindow.getServerURL()+"/album-art/"+model.album_art_file+"?token="+mainWindow.getToken()
+        }
+
+        swipe.transition: Transition {
+            SmoothedAnimation { velocity: 3; easing.type: Easing.InOutCubic }
         }
 
     }

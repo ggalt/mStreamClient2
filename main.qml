@@ -10,8 +10,8 @@ ApplicationWindow {
     objectName: "appWindow"
 
     visible: true
-//    width: 800
-//    height: 480
+    width: 800
+    height: 480
     color: "#c8c8c8"
     title: qsTr("mStreamClient")
 
@@ -26,11 +26,12 @@ ApplicationWindow {
 
         ToolButton {
             id: toolButton
-            text: mainWindow.listStackView.depth <=1 ? "\u2630" : "\u21A9"
+//            text: mainWindow.listStackView.depth <=1 ? "\u2630" : "\u21A9"
+            text: mainWindow.listStackView.depth <=1 ? "\u205D" : "\u21A9"
             font.pointSize: toolBar.textPointSize
 
             function refreshText() {
-                text=mainWindow.listStackView.depth <=1 ? "\u2630" : "\u21A9"
+                text=mainWindow.listStackView.depth <=1 ? "\u205D" : "\u21A9"
             }
 
             onClicked: {
@@ -45,10 +46,6 @@ ApplicationWindow {
                     if(mainWindow.listStackView.depth === 1)
                         mainWindow.state="ListChooserWindow"
 
-//                    if(nowPlayingTimer.running)
-//                        nowPlayingTimer.restart()
-//                    else
-//                        nowPlayingTimer.start()
                 } else {
                     // enter setup
                     myLogger.log("listStackView depth:", mainWindow.listStackView.depth)
@@ -76,34 +73,26 @@ ApplicationWindow {
             width: hasPlayListLoaded && mainWindow.listStackView.currentItem.objectName !== "playlistForm"? height : 0
             text: "\u21AA"
             font.pointSize: toolBar.textPointSize
+
+            onClicked: {
+                // unwind poppedItems
+                if( appWindow.poppedItems.length > 0) {
+                    var item = appWindow.poppedItems.pop()
+                    myLogger.log("popped item:", item)
+                    if(item === "playlistForm") {
+                        mainWindow.listStackView.push( "qrc:/Forms/PlayListForm.qml" )
+                    } else if(item === "albumPage") {
+                        mainWindow.listStackView.push( "qrc:/Forms/AlbumListForm.qml" )
+                    } else if(item === "artistPage") {
+                        mainWindow.listStackView.push( "qrc:/Forms/ArtistListForm.qml" )
+                    } else if(item === "managedPlaylist") {
+                        myLogger.log("managedPlaylist")
+                    }
+                }
+            }
         }
 
     }
-
-//    Timer {
-//        id: _nowPlayingTimer
-//        interval: 5000
-//        running: false
-//        onTriggered: {
-//            myLogger.log("return to Now Playing", mainWindow.listStackView.depth, mainWindow.listStackView.index, currentPlayList.count)
-//            console.log("poppedItems before push:", appWindow.poppedItems)
-//            mainWindow.setMainWindowState("NowPlaying")
-//            while( appWindow.poppedItems.length > 0 ) {
-//                var item = appWindow.poppedItems.pop()
-//                myLogger.log("popped item:", item)
-//                if(item === "playlistForm") {
-//                    mainWindow.listStackView.push( "qrc:/Forms/PlayListForm.qml" )
-//                } else if(item === "albumPage") {
-//                    mainWindow.listStackView.push( "qrc:/Forms/AlbumListForm.qml" )
-//                } else if(item === "artistPage") {
-//                    mainWindow.listStackView.push( "qrc:/Forms/ArtistListForm.qml" )
-//                } else if(item === "managedPlaylist") {
-//                    myLogger.log("managedPlaylist")
-//                }
-//            }
-//            appWindow.poppedItems = []
-//        }
-//    }
 
     MainWindow {
         id: mainWindow
@@ -168,7 +157,6 @@ ApplicationWindow {
 
     property alias currentPlayList: _currentPlayList
     property alias toolBarLabel: _toolBarLabel
-//    property alias nowPlayingTimer: _nowPlayingTimer
 
     /////////////////////////////////////////////////////////////////////////////////
     /// Functions
@@ -271,10 +259,8 @@ ApplicationWindow {
     }
 
     function actionClick(action) {
-//        if(nowPlayingTimer.running) {
-//            nowPlayingTimer.stop()
-//            appWindow.poppedItems = []
-//        }
+        // if we have moved back up the stack, clear the list
+        appWindow.poppedItems = []
 
         if(action === "Artists") {
             myLogger.log("Artist Click")
@@ -290,7 +276,7 @@ ApplicationWindow {
     function updatePlaylist(m_item, typeOfItem, action) { // m_item needs to be the name of an artist, album, playlist or song
         myLogger.log("Update Playlist", m_item, typeOfItem, action)
         if(action === "replace") {
-            _currentPlayList.clearMe()
+            _currentPlayList.clearPlayList()
             myLogger.log("_currentPlayList.count:", _currentPlayList.count)
             myLogger.log("playlist:", _currentPlayList.json)
             //            playlistAddAt = 0
@@ -308,7 +294,6 @@ ApplicationWindow {
     }
 
     function loadToPlaylist() {
-        //        myLogger.log("gettingArtists is:", gettingArtists, "gettingAlbums is:", gettingAlbums, "gettingTitles is:", gettingTitles)
         if( gettingArtists <= 0 && gettingAlbums <= 0 && gettingTitles <= 0) {
             myLogger.log("loading playlist whch has length of:", _currentPlayList.count)
             isPlaying = true
@@ -324,8 +309,6 @@ ApplicationWindow {
             myLogger.log("NULL IMAGE")
         }
         _currentPlayList.addSong(songObj)
-        //        myLogger.log("song object:", JSON.stringify(songObj))
-        //        _currentPlayList.add(songObj)
         gettingTitles--;
         loadToPlaylist();
     }
@@ -347,7 +330,6 @@ ApplicationWindow {
 
     function playlistAddAlbumResp(resp) {
         var albumResp = JSON.parse(resp.responseText) // for some reason, our delegate doesn't like 'album-art'
-        //        myLogger.log("playlistAddAlbumResp:", resp.responseText)
         for( var i = 0; i < albumResp.length; i++ ) {
             gettingTitles++;
             if( albumResp[i].metadata["album-art"] === null )
@@ -355,7 +337,6 @@ ApplicationWindow {
             playlistAddSong(albumResp[i])
         }
         gettingAlbums--;
-        //        myLogger.log("exit getting albums with count:", gettingAlbums)
         loadToPlaylist()
     }
 
@@ -366,12 +347,10 @@ ApplicationWindow {
             playlistAddAlbum(artistResp.albums[i].name)
         }
         gettingArtists--;
-        //        myLogger.log("exit getting artists")
         loadToPlaylist()
     }
 
     function selectSongAtIndex(idx) {
-        //        myLogger.log("selected song at index:", idx)
         _currentPlayList.setMusicPlaylistIndex(idx)
         nowPlaying.startPlay()
     }
@@ -379,6 +358,5 @@ ApplicationWindow {
     function setGlobalVolume(vol) {
         mainWindow.mediaVolume = vol
     }
-
 
 }
