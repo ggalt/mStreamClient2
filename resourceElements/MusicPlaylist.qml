@@ -129,6 +129,8 @@ JSONListModel {
 
     function clearPlayList() {
         clear() // clears underlying jSon model
+        currentStaticIndex = 0
+        currentPlayingIndex = 0
         playListArray = []
     }
 }

@@ -93,7 +93,9 @@ Item {
             anchors.left: listManagerRect.right
             z: listManagerRect.z-1
 
-            keys: [delegateDrop]
+            onContainsDragChanged: console.log("DRAG")
+
+//            keys: [delegateDrop]
             onDropped: {
                 console.log("DROP!!")
                 console.log("DROP!!", drop.source.objectName, drop.source.delegateLabel.text)

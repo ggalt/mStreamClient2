@@ -36,14 +36,20 @@ ScrollingListView {
 //        delegateImage.source: mainWindow.getServerURL()+"/album-art/"+model.album_art_file+"?token="+mainWindow.getToken()
 
 //        property string delegateDrop: "albumDelegate"
-//        Drag.active: delegateMouseArea.drag.active
-//        Drag.keys: [delegateDrop]
-//        states: State {
-//            when: delegateMouseArea.drag.active
-//            ParentChange {
-//                target: albumDelegate
-//                parent: mainWindow.nowPlayingForm
-//            }
+////        Drag.active: delegateMouseArea.drag.active
+////        Drag.keys: [delegateDrop]
+//        Drag.active: true
+////        states: State {
+////            when: delegateMouseArea.drag.active
+////            ParentChange {
+////                target: albumDelegate
+////                parent: mainWindow.nowPlayingForm
+////            }
+////        }
+
+//        function dropDelegate() {
+//            var localPoint = Qt.point(delegateMouseArea.mouseX, delegateMouseArea.mouseY)
+//            myLogger.log("Dropped On:", localPoint)
 //        }
 
 //        MouseArea {
@@ -53,7 +59,12 @@ ScrollingListView {
 
 //            onPressed: albumDelegate.color = "lightgrey"
 
-//            onReleased: albumDelegate.color = "#80808080"
+//            onReleased: {
+//                albumDelegate.color = "#80808080"
+//                myLogger.log("mouse says:", mouse.x, mouse.y)
+//                myLogger.log("Drop Area contains Drag?", listManager.dropAreaAlias.containsDrag)
+//                albumDelegate.dropDelegate()
+//            }
 
 //            onClicked: {
 //                albumDelegate.ListView.view.currentIndex=index
