@@ -193,6 +193,7 @@ Item {
 
             onClicked: {
                 ToolTip.hide()
+                currentPlayList.setLoop(btnLoop.checked)
             }
         }
 
@@ -216,6 +217,7 @@ Item {
 
             onClicked: {
                 ToolTip.hide()
+                currentPlayList.setShuffle(btnShuffle.checked)
             }
         }
     }

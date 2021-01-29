@@ -31,10 +31,34 @@ JSONListModel {
 
     function setShuffle(status) {
         shuffle = status
+        if(shuffle)
+            knuthShuffle()
+        else
+            unShuffle()
     }
 
     function getShuffle() {
         return shuffle
+    }
+
+
+    function knuthShuffle() {
+        var rand, temp, i;
+
+        for( i = playListArray.length-1; i > 0; i-- ) {
+            rand = Math.floor((i + 1) * Math.random());//get random between zero and i (inclusive)
+            temp = playListArray[rand];//swap i and the zero-indexed number
+            playListArray[rand] = playListArray[i];
+            playListArray[i] = temp;
+        }
+        myLogger.log("Shuffled array is:", playListArray)
+    }
+
+    function unShuffle() {
+        var i;
+        for(i=0; i < titleCount; i++)
+            playListArray[i]=i
+        myLogger.log("Unshuffled array is:", playListArray)
     }
 
     function setCurrentTrack(trackNum) {
@@ -50,6 +74,7 @@ JSONListModel {
         console.assert("Index past end of playlist", currentStaticIndex < titleCount)
         currentPlayingIndex = playListArray[currentStaticIndex]   // playListArray contains
         console.assert("Index does not exist", currentPlayingIndex < titleCount )
+        myLogger.log("Current Static Index Is:", currentStaticIndex, "Current Playing Index is:", currentPlayingIndex)
         return currentPlayingIndex
     }
 
@@ -89,9 +114,10 @@ JSONListModel {
 
     function getNextTrack() {
         currentStaticIndex++
+        myLogger.log("Next Track -- Current Static Index is:", currentStaticIndex)
         if(currentStaticIndex >= titleCount) {
             currentStaticIndex = 0
-            trackChange(currentStaticIndex)
+            trackChange(getCurrentTrackNumber())
             if(looping) {
                 return true
             } else {
@@ -99,25 +125,26 @@ JSONListModel {
                 return false
             }
         }
-        trackChange(currentStaticIndex)
+        trackChange(getCurrentTrackNumber())
         return true
     }
 
     function getPreviousTrack() {
         currentStaticIndex--
+        myLogger.log("Previous Track -- Current Static Index is:", currentStaticIndex)
         if(currentStaticIndex < 0) {
             if(looping) {
                 currentStaticIndex = titleCount-1
-                trackChange(currentStaticIndex)
+                trackChange(getCurrentTrackNumber())
                 return true
             } else {
                 currentStaticIndex = 0
-                trackChange(currentStaticIndex)
+                trackChange(getCurrentTrackNumber())
                 endOfList()     // emit signal that we are at the end
                 return false
             }
         }
-        trackChange(currentStaticIndex)
+        trackChange(getCurrentTrackNumber())
         return true
     }
 
