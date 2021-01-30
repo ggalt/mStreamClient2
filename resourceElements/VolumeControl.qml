@@ -30,7 +30,7 @@ Item {
 //        anchors.right: parent.right
         anchors.bottom: topDown ? undefined : volumeImg.top
         anchors.top: topDown ? volumeImg.bottom : undefined
-        color: "#4d808080"
+        color: "transparent"
         radius: width / 2
 
         ColorSlider {

@@ -89,17 +89,17 @@ Rectangle {
             orientation: isVertical ? Qt.Horizontal : Qt.Vertical
             GradientStop {
                 position: 0
-                color: "#cc000000"
+                color: "#99008080"
             }
 
             GradientStop {
                 position: 0.5
-                color: "#ccffffff"
+                color: "#b3ffffff"
             }
 
             GradientStop {
                 position: 1
-                color: "#b3000000"
+                color: "#99008080"
             }
         }
     }

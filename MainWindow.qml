@@ -74,7 +74,7 @@ Item {
                 id: listManager
                 anchors.fill: parent
                 visible: true
-                clip: true      // false if we want drag and drop
+                clip: false      // false if we want drag and drop
                 initialItem: Rectangle {
 //                    anchors.fill: parent
                 }
@@ -91,15 +91,29 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.left: listManagerRect.right
-            z: listManagerRect.z-1
+//            z: listManagerRect.z-1
 
-            onContainsDragChanged: console.log("DRAG")
-
-//            keys: [delegateDrop]
             onDropped: {
-                console.log("DROP!!")
-                console.log("DROP!!", drop.source.objectName, drop.source.delegateLabel.text)
+                console.log("DROPPED!!", drag.source.objectName)
+                drag.source.dropSuccess()
             }
+            onContainsDragChanged: console.log("contains drag")
+            onEntered: {
+                console.log("Entered Drop Zone")
+                drag.source.enterDropZone()
+            }
+            onExited: {
+                console.log("Exited Drop Zone")
+                drag.source.exitDropZone()
+            }
+
+            //            onContainsDragChanged: console.log("DRAG")
+
+////            keys: [delegateDrop]
+//            onDropped: {
+//                console.log("DROP!!")
+//                console.log("DROP!!", drop.source.objectName, drop.source.delegateLabel.text)
+//            }
             NowPlayingForm {
                 id: _nowPlayingForm
                 anchors.fill: parent
@@ -108,7 +122,7 @@ Item {
                         when: dropArea.containsDrag
                         PropertyChanges {
                             target: _nowPlayingForm
-                            opacity: 0.0
+                            opacity: 0.4
                         }
                     }
                 ]
