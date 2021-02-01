@@ -83,6 +83,7 @@ ScrollingListView {
             hasImage: true
             delegateLabel.text: model.metadata.track+" - "+model.metadata.title
             delegateImage.source: mainWindow.getServerURL()+"/album-art/"+model.metadata["album-art"]+"?token="+mainWindow.getToken()
+            textPointSize:  mainWindow.getTextPointSize()
         }
     }
 

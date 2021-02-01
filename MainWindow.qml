@@ -144,6 +144,7 @@ Item {
         property real setMediaVolume
         property bool setIsSetup
         property bool setUseLoginCredentials
+        property real basePointSize
     }
 
     SettingsForm {
@@ -373,7 +374,20 @@ Item {
         return appSettings.setIsSetup
     }
 
-    Component.onCompleted: testTimer.start()
+    function getTextPointSize() {
+        return (2*appSettings.basePointSize) / 3
+    }
+
+    Component.onCompleted: {
+        testTimer.start()
+        nowPlayingForm.appVolume=appSettings.setMediaVolume
+    }
+
+    Component.onDestruction: {
+        appSettings.setMediaVolume=nowPlayingForm.appVolume
+        myLogger.log("Setting Closing Volume to:", nowPlayingForm.appVolume)
+    }
+
 }
 
 /*##^##

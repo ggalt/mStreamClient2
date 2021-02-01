@@ -10,6 +10,7 @@ Rectangle {
     property alias delegateLabel: _delegateLabel
     property alias delegateImage: _delegateImage
     property alias source: _delegateImage.source
+    property alias textPointSize: _delegateLabel.font.pointSize
     property bool hasImage: false
 
     color: "transparent"      // transparent background
@@ -27,7 +28,6 @@ Rectangle {
         anchors.leftMargin: 10
         anchors.right: parent.right
         height: parent.height
-        font.pointSize: 16
         font.family: "Arial"
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap

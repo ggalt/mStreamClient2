@@ -33,6 +33,7 @@ ScrollingListView {
         hasImage: true
         delegateLabel.text: model.name
         delegateImage.source: mainWindow.getServerURL()+"/album-art/"+model.album_art_file+"?token="+mainWindow.getToken()
+        textPointSize:  mainWindow.getTextPointSize()
 
         ///////////////////////////////////////////////////////////////////////////////
         //// DRAG ELEMENTS

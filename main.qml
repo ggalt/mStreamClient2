@@ -22,7 +22,7 @@ ApplicationWindow {
     header: ToolBar {
         id: toolBar
         contentHeight: toolButton.implicitHeight
-        property int textPointSize: 20
+        property int textPointSize: mainWindow.getTextPointSize()
 
         ToolButton {
             id: toolButton
@@ -48,6 +48,7 @@ ApplicationWindow {
 
                 } else {
                     // enter setup
+                    mainWindow.state = "Setup"
                     myLogger.log("listStackView depth:", mainWindow.listStackView.depth)
                     myLogger.log("listStackView empty:", mainWindow.listStackView.empty)
                     myLogger.log("listStackView at:", mainWindow.listStackView.currentItem.objectName)
@@ -100,12 +101,16 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: toolBar.bottom
+
+        property alias mainApp: appWindow
+
+        listStackView.onDepthChanged: toolButton.refreshText()     // for some reason, text refresh seems unreliable
+
         Component.onCompleted: {
             if(  getSetupState() )
                 sendLogin()
         }
-        property alias mainApp: appWindow
-        listStackView.onDepthChanged: toolButton.refreshText()     // for some reason, text refresh seems unreliable
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////

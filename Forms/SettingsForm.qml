@@ -9,7 +9,7 @@ import "../resourceElements"
 import "../"
 
 Rectangle {
-        id: _settingsForm
+    id: _settingsForm
     //    property alias userName: appSettings.setUserName
     //    property alias passWord: appSettings.setPassword
     //    property string serverURLandPort: ""
@@ -36,6 +36,7 @@ Rectangle {
         appSettings.setServerPort = txtPortNumber.text
         getFullURL()
         appSettings.setIsSetup = true
+        appSettings.basePointSize = pointSizeSlider.value
         myLogger.log(appSettings.setServerURL, appSettings.setServerPort, appSettings.setUserName, appSettings.setPassword )
         mainWindow.setMainWindowState("ListChooserWindow")
     }
@@ -117,7 +118,7 @@ Rectangle {
             id: frame
             //                x: 8
             //                y: 61
-            height: 200
+            height: 156
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: txtPortNumber.bottom
@@ -186,24 +187,72 @@ Rectangle {
         }
 
         Frame {
+            id: frame2
+            x: 0
+            y: 245
+            width: 620
+            height: 115
+
+            Text {
+                id: text5
+                x: 0
+                y: 0
+                width: 58
+                height: 17
+                text: qsTr("Text Size: ")
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: 12
+            }
+
+            Text {
+                id: baseTextPointSize
+                x: 64
+                width: 51
+                text: pointSizeSlider.value
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                font.pixelSize: pointSizeSlider.value
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Slider {
+                id: pointSizeSlider
+                y: 26
+                height: 40
+                anchors.left: baseTextPointSize.right
+                anchors.right: parent.right
+                snapMode: Slider.SnapAlways
+                stepSize: 1
+                anchors.leftMargin: 15
+                to: 30
+                from: 5
+                anchors.rightMargin: 10
+                value: appSettings.basePointSize
+            }
+        }
+
+        Frame {
             id: frame1
             x: 196
             width: 50
             height: 40
             visible: false
             anchors.top: frame.bottom
+            anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 10
+            anchors.topMargin: 74
         }
 
         Button {
             id: btnOK
-            x: 78
+            x: 185
             //                x: 215
             //                y: 351
             text: qsTr("Accept")
             anchors.right: frame1.left
             anchors.top: frame1.top
+            anchors.rightMargin: 0
+            anchors.topMargin: 64
             onClicked:{
                 updateSettings()
                 appWindow.sendLogin()
@@ -217,15 +266,18 @@ Rectangle {
             text: qsTr("Cancel")
             anchors.left: frame1.right
             anchors.top: frame1.top
+            anchors.leftMargin: 0
+            anchors.topMargin: 64
             onClicked: mainWindow.setMainWindowState("ListChooserWindow")
 
         }
+
 
     }
 }
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:640}D{i:8}D{i:9}D{i:11}D{i:7}D{i:13}D{i:14}D{i:15}
+    D{i:0;autoSize:true;height:480;width:640}
 }
 ##^##*/

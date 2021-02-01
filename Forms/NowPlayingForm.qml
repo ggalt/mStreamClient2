@@ -18,6 +18,8 @@ Item {
     property int toolTipDelay: 1000
     property alias mediaPlayer: _mediaPlayer
     property alias progressBar: _progressBar
+    property alias appVolume: volumeControl.volume
+
 
     Logger {
         id:myLogger
