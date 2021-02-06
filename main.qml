@@ -260,7 +260,7 @@ ApplicationWindow {
 
     function songRequestResp(xmlhttp) {
         songListJSONModel.json = xmlhttp.responseText
-        stackView.push( "qrc:/SongForm.qml" )
+        mainWindow.listStackView.push( "qrc:/Forms/SongListForm.qml" )
     }
 
     function actionClick(action) {
@@ -293,6 +293,10 @@ ApplicationWindow {
             playlistAddAlbum(m_item)
         } else if( typeOfItem === "playlist") {
             playlistAddPlaylist(m_item)
+        } else if( typeOfItem === "song") {
+            myLogger.log("Song object item:", m_item)
+            var songObject = JSON.parse(m_item)
+            _currentPlayList.addSong(songObject)
         } else {
             playlistAddSong(m_item)
         }
@@ -335,10 +339,14 @@ ApplicationWindow {
 
     function playlistAddAlbumResp(resp) {
         var albumResp = JSON.parse(resp.responseText) // for some reason, our delegate doesn't like 'album-art'
+        myLogger.log("###albumResponse", resp.responseText)
         for( var i = 0; i < albumResp.length; i++ ) {
             gettingTitles++;
-            if( albumResp[i].metadata["album-art"] === null )
-                albumResp[i].metadata["album-art"] = albumListJSONModel.returnObjectContaining("name",albumResp[i].metadata["album"])["album_art_file"]
+            if( albumResp[i].metadata["album-art"] === null ) {
+                if(albumListJSONModel.count > 0) {
+                    albumResp[i].metadata["album-art"] = albumListJSONModel.returnObjectContaining("name",albumResp[i].metadata["album"])["album_art_file"]
+                }
+            }
             playlistAddSong(albumResp[i])
         }
         gettingAlbums--;

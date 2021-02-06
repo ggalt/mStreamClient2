@@ -20,6 +20,8 @@ Item {
     property alias progressBar: _progressBar
     property alias appVolume: volumeControl.volume
 
+    signal imageClicked
+
 
     Logger {
         id:myLogger
@@ -54,11 +56,18 @@ Item {
         source: "../images/ms-icon-600x600.png"
         z: volumeControl.z -1   // make sure we are behind the volumeControl
 
-//        onStatusChanged: {
-//          if (status == Image.Ready) {
-//             myLogger.log('Loaded: sourceSize ==', paintedWidth, width, height);
-//          }
-//        }
+        MouseArea {
+            id: imageMouseArea
+            anchors.centerIn: parent
+            onClicked: nowPlayingForm.imageClicked()
+        }
+
+        onStatusChanged: {
+          if (status == Image.Ready) {
+              imageMouseArea.width = (9*paintedWidth)/10
+              imageMouseArea.height = (9*paintedHeight)/10
+          }
+        }
 
         ColorProgressBar {
             id: _progressBar
@@ -278,8 +287,9 @@ Item {
                 appWindow.toolBarLabel.scrollText = "Artist:"+currentPlayList.getCurrentSongObject().metadata["artist"] + " / "+
                         "Album:"+currentPlayList.getCurrentSongObject().metadata["album"] + " / "+
                         "Title:"+currentPlayList.getCurrentSongObject().metadata["title"];
-                coverImage.source = serverURL+"/album-art/"+currentPlayList.getCurrentSongObject().metadata["album-art"]+"?token="+myToken
-                //                currentSong(currentPlayList.currentIndex)
+                if(currentPlayList.getCurrentSongObject().metadata["album-art"]!==null) {
+                    coverImage.source = serverURL+"/album-art/"+currentPlayList.getCurrentSongObject().metadata["album-art"]+"?token="+myToken
+                }
             }
         }
 

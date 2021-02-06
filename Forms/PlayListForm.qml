@@ -82,7 +82,7 @@ ScrollingListView {
             clip: true
             hasImage: true
             delegateLabel.text: model.metadata.track+" - "+model.metadata.title
-            delegateImage.source: mainWindow.getServerURL()+"/album-art/"+model.metadata["album-art"]+"?token="+mainWindow.getToken()
+            delegateImage.source: model.metadata["album-art"]!==null ? mainWindow.getServerURL()+"/album-art/"+model.metadata["album-art"]+"?token="+mainWindow.getToken() : "../images/music_default2.png"
             textPointSize:  mainWindow.getTextPointSize()
         }
     }
@@ -122,3 +122,6 @@ ScrollingListView {
         currentPlayList.trackChange.connect(changeTrackIndex)
     }
 }
+
+
+

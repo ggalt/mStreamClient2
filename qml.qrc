@@ -44,5 +44,7 @@
         <file>resourceElements/MusicPlaylist.qml</file>
         <file>Forms/PlayListForm.qml</file>
         <file>images/mstreamIcon.icns</file>
+        <file>resourceElements/DraggableListDelegate.qml</file>
+        <file>Forms/SongListForm.qml</file>
     </qresource>
 </RCC>

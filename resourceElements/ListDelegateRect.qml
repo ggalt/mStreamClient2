@@ -6,7 +6,6 @@ Rectangle {
     id: listDelegateRect
     objectName: "listDelegateRect"
 
-
     property alias delegateLabel: _delegateLabel
     property alias delegateImage: _delegateImage
     property alias source: _delegateImage.source
@@ -44,7 +43,6 @@ Rectangle {
         fillMode: Image.PreserveAspectFit
         visible: hasImage
         source: "../images/music_default2.png"
-
-//        source: hasImage ?   mainWindow.serverURL+"/album-art/"+model.album_art_file+"?token="+mainWindow.myToken : "../images/music_default2.png"
     }
+
 }
