@@ -167,15 +167,48 @@ ApplicationWindow {
     /// Functions
     /////////////////////////////////////////////////////////////////////////////////
 
+//    function sendLogin() {
+//        var xmlhttp = new XMLHttpRequest();
+//        var url = serverURL+"/login";
+//        myLogger.log("URL:", url)
+//        xmlhttp.open("POST", url, true);
+
+//        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+//        xmlhttp.setRequestHeader("datatype", "json");
+//        xmlhttp.onreadystatechange = function() { // Call a function when the state changes.
+//            if (xmlhttp.readyState === 4) {
+//                if (xmlhttp.status === 200) {
+//                    myLogger.log("ResponseText:", xmlhttp.responseText)
+//                    var resp = JSON.parse(xmlhttp.responseText)
+//                    myToken = resp.token
+//                } else {
+//                    myLogger.log("error: " + xmlhttp.status)
+//                }
+//            }
+//        }
+//        var jsString = JSON.stringify({ username: mainWindow.getUserName(), password: mainWindow.getPassWord() })
+//        myLogger.log("LOGIN STRING:", jsString)
+
+//        xmlhttp.send(jsString);
+//    }
+
     function sendLogin() {
         var xmlhttp = new XMLHttpRequest();
-        var url = serverURL+"/login";
+        var url = serverURL+"/api/v1/auth/login";
         myLogger.log("URL:", url)
         xmlhttp.open("POST", url, true);
 
         xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xmlhttp.setRequestHeader("datatype", "json");
+
+        var jsString = JSON.stringify({ username: mainWindow.getUserName(), password: mainWindow.getPassWord() })
+        myLogger.log("LOGIN STRING:", jsString)
+
+        xmlhttp.send(jsString);
+
         xmlhttp.onreadystatechange = function() { // Call a function when the state changes.
+            myLogger.log("XMLHTTP readyState and status are:", xmlhttp.readyState, xmlhttp.status)
+            myLogger.log("XML RESPONSE TEXT:", xmlhttp.responseText)
             if (xmlhttp.readyState === 4) {
                 if (xmlhttp.status === 200) {
                     myLogger.log("ResponseText:", xmlhttp.responseText)
@@ -186,9 +219,6 @@ ApplicationWindow {
                 }
             }
         }
-        var jsString = JSON.stringify({ username: mainWindow.getUserName(), password: mainWindow.getPassWord() })
-
-        xmlhttp.send(jsString);
     }
 
     /// serverCall: Generic function to call the mStream server
