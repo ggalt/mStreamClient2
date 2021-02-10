@@ -19,6 +19,7 @@ Item {
     property alias mediaPlayer: _mediaPlayer
     property alias progressBar: _progressBar
     property alias appVolume: volumeControl.volume
+    property alias appMute: volumeControl.mute
 
     signal imageClicked
 

@@ -11,8 +11,11 @@ Item {
     property bool topDown: true
     property alias volume: _volumeSlider.value
     property alias volumeSlider: _volumeSlider
+    property bool mute: false
 
     property int drawSlideInterval: 1500
+    property string volumeImage: "../images/audio-150191_640.png"
+    property string muteVolumeImage: "../images/audio-150191_640.png"
 
     state: "inactive"
 
@@ -56,11 +59,15 @@ Item {
         smooth: true
         fillMode: Image.PreserveAspectFit
         asynchronous: true
-        source: "../images/audio-150191_640.png"
+        source: volumeImage
         MouseArea {
             anchors.fill: parent
             onPressed: {
                 _volumeControl.state = "active"
+            }
+
+            onPressAndHold:  {
+                myLogger.log("Mute Volume")
             }
         }
     }

@@ -109,7 +109,6 @@ Rectangle {
     }
 
     Drag.dragType: Drag.Automatic
-    Drag.imageSource: _draggableListDelegate.source
 
     ///////////////////////////////////////////////////////////////////////////////
     //// MOUSEAREA ELEMENTS
@@ -121,16 +120,16 @@ Rectangle {
 
         drag.target: _draggableListDelegate
 
-        onPressed: _delegateRect.color = delegatePressedColor
+        onPressed: {
+            _delegateRect.color = delegatePressedColor
+            parent.grabToImage(function(result) {
+                myLogger.log("result URL:", result.url)
+                parent.Drag.imageSource = result.url
+            })
+        }
         onReleased: {
             _delegateRect.color = delegateBackgroundColor
         }
-
-
-//        onClicked: {
-//            _draggableListDelegate.ListView.view.currentIndex=index
-//            myLogger.log("click for:", _draggableListDelegate.actionItem)
-//        }
 
         onPressAndHold: {
             myLogger.log("Press and hold")
