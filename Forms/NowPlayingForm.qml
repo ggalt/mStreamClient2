@@ -42,7 +42,7 @@ Item {
         onVolumeChanged: {
             mediaPlayer.volume = volume
         }
-//        Component.onCompleted:volumeSlider.setVolume(volume)
+        //        Component.onCompleted:volumeSlider.setVolume(volume)
     }
 
     Image {
@@ -64,10 +64,10 @@ Item {
         }
 
         onStatusChanged: {
-          if (status == Image.Ready) {
-              imageMouseArea.width = (9*paintedWidth)/10
-              imageMouseArea.height = (9*paintedHeight)/10
-          }
+            if (status == Image.Ready) {
+                imageMouseArea.width = (9*paintedWidth)/10
+                imageMouseArea.height = (9*paintedHeight)/10
+            }
         }
 
         ColorProgressBar {
@@ -232,6 +232,11 @@ Item {
                 currentPlayList.setShuffle(btnShuffle.checked)
             }
         }
+
+    }
+
+    onAppMuteChanged: {
+        _mediaPlayer.muted=appMute
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////

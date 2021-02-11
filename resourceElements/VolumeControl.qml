@@ -15,7 +15,7 @@ Item {
 
     property int drawSlideInterval: 1500
     property string volumeImage: "../images/audio-150191_640.png"
-    property string muteVolumeImage: "../images/audio-150191_640.png"
+    property string muteVolumeImage: "../images/mute-audio-150191_640.png"
 
     state: "inactive"
 
@@ -59,15 +59,16 @@ Item {
         smooth: true
         fillMode: Image.PreserveAspectFit
         asynchronous: true
-        source: volumeImage
+        source: mute ? muteVolumeImage : volumeImage
         MouseArea {
             anchors.fill: parent
-            onPressed: {
+            onPressAndHold: {
                 _volumeControl.state = "active"
             }
 
-            onPressAndHold:  {
+            onClicked: {
                 myLogger.log("Mute Volume")
+                mute = !mute
             }
         }
     }
