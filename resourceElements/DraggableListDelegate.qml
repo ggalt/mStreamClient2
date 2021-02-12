@@ -94,7 +94,7 @@ Rectangle {
             originalX = x
             originalY = y
             _draggableListDelegate.state="DRAG"
-            Drag.start();
+//            Drag.start();
         } else {
             print("drag finished")
             if(!overDropZone) {
@@ -109,6 +109,7 @@ Rectangle {
     }
 
     Drag.dragType: Drag.Automatic
+    Drag.active: _delegateMouseArea.drag.active
 
     ///////////////////////////////////////////////////////////////////////////////
     //// MOUSEAREA ELEMENTS
@@ -122,7 +123,7 @@ Rectangle {
 
         onPressed: {
             _delegateRect.color = delegatePressedColor
-            parent.grabToImage(function(result) {
+            _delegateRect.grabToImage(function(result) {
                 myLogger.log("result URL:", result.url)
                 parent.Drag.imageSource = result.url
             })
