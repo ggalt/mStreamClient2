@@ -145,7 +145,7 @@ Item {
 
                 }
 
-                back: PlayListForm {
+                back: CurrentPlayListForm {
                     anchors.fill: parent
                 }
 

@@ -61,7 +61,7 @@ Rectangle {
     //// DRAG ELEMENTS
     ///////////////////////////////////////////////////////////////////////////////
 
-    property bool dragActive: delegateMouseArea.drag.active
+    property alias dragActive: _delegateMouseArea.drag.active
     property bool overDropZone: false
     property int originalY: y
     property int originalX: x

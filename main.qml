@@ -81,7 +81,7 @@ ApplicationWindow {
                     var item = appWindow.poppedItems.pop()
                     myLogger.log("popped item:", item)
                     if(item === "playlistForm") {
-                        mainWindow.listStackView.push( "qrc:/Forms/PlayListForm.qml" )
+                        mainWindow.listStackView.push( "qrc:/Forms/CurrentPlayListForm.qml" )
                     } else if(item === "albumPage") {
                         mainWindow.listStackView.push( "qrc:/Forms/AlbumListForm.qml" )
                     } else if(item === "artistPage") {
@@ -156,7 +156,7 @@ ApplicationWindow {
     property bool hasPlayListLoaded: false
     property int playlistAddAt: 0
 
-    property int globalDebugLevel: 2        // 0 = critical, 1 = warn, 2 = all
+    property int globalDebugLevel: 0        // 0 = critical, 1 = warn, 2 = all
 
     property var poppedItems: []
 
@@ -166,31 +166,6 @@ ApplicationWindow {
     /////////////////////////////////////////////////////////////////////////////////
     /// Functions
     /////////////////////////////////////////////////////////////////////////////////
-
-//    function sendLogin() {
-//        var xmlhttp = new XMLHttpRequest();
-//        var url = serverURL+"/login";
-//        myLogger.log("URL:", url)
-//        xmlhttp.open("POST", url, true);
-
-//        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-//        xmlhttp.setRequestHeader("datatype", "json");
-//        xmlhttp.onreadystatechange = function() { // Call a function when the state changes.
-//            if (xmlhttp.readyState === 4) {
-//                if (xmlhttp.status === 200) {
-//                    myLogger.log("ResponseText:", xmlhttp.responseText)
-//                    var resp = JSON.parse(xmlhttp.responseText)
-//                    myToken = resp.token
-//                } else {
-//                    myLogger.log("error: " + xmlhttp.status)
-//                }
-//            }
-//        }
-//        var jsString = JSON.stringify({ username: mainWindow.getUserName(), password: mainWindow.getPassWord() })
-//        myLogger.log("LOGIN STRING:", jsString)
-
-//        xmlhttp.send(jsString);
-//    }
 
     function sendLogin() {
         var xmlhttp = new XMLHttpRequest();
@@ -336,7 +311,7 @@ ApplicationWindow {
         if( gettingArtists <= 0 && gettingAlbums <= 0 && gettingTitles <= 0) {
             myLogger.log("loading playlist whch has length of:", _currentPlayList.count)
             isPlaying = true
-            mainWindow.listStackView.push("qrc:/Forms/PlayListForm.qml")
+            mainWindow.listStackView.push("qrc:/Forms/CurrentPlayListForm.qml")
             mainWindow.nowPlayingForm.mediaPlayer.startPlaylist()
         }
     }
