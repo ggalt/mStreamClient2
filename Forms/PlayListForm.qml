@@ -3,11 +3,11 @@ import QtQuick.Controls 2.15
 import "../resourceElements"
 
 ScrollingListView {
-    id: albumPage
-    objectName: "albumPage"
+    id: playListPage
+    objectName: "playListPage"
 
-    formName: "Album List"
-    myModel: albumListJSONModel.model
+    formName: "PlayList"
+    myModel: playListJSONModel.model
     highlightLetter: myCurrentItem.myData.name[0]
     clip: false
 
@@ -18,26 +18,24 @@ ScrollingListView {
     }
 
     myDelegate: DraggableListDelegate {
-        id: albumDelegate
-        objectName: "albumDelegate"
+        id: playlistDelegate
+        objectName: "playlistDelegate"
         property variant myData: model
 
-        height: 87
-        width: albumPage.width
+        height: 50
+        width: playListPage.width
         clip: true
-        hasImage: true
-        actionCommand: "album"
+        hasImage: false
+        actionCommand: "load"
         actionItem: model.name
         delegateLabel.text: model.name
-        delegateImage.source: mainWindow.getServerURL()+"/album-art/"+model.album_art_file+"?token="+mainWindow.getToken()
         textPointSize:  mainWindow.getTextPointSize()
 
         delegateMouseArea.onClicked: {
             ListView.view.currentIndex=index
             myLogger.log("click for:", actionItem)
-            mainApp.requestAlbumSongs(actionItem)
+            mainApp.requestPlayListSongs(actionItem)
         }
-
     }
 
 }

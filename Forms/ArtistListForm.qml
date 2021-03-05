@@ -5,7 +5,7 @@ import "../resourceElements"
 ScrollingListView {
     id: artistPage
     objectName: "artistPage"
-    anchors.fill: parent
+//    anchors.fill: parent
 
     formName: "Artist List"
     myModel: artistListJSONModel.model

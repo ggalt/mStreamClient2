@@ -76,7 +76,7 @@ Rectangle {
             labelText: "Playlists"
             imageSource: "../images/music_silhouette_640.png"
             onClicked: {
-                mainWindow.state = "NowPlaying"
+                appWindow.actionClick("Playlists")
             }
         }
 

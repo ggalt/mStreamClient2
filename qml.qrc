@@ -47,5 +47,6 @@
         <file>resourceElements/DraggableListDelegate.qml</file>
         <file>Forms/SongListForm.qml</file>
         <file>images/mute-audio-150191_640.png</file>
+        <file>Forms/PlayListForm.qml</file>
     </qresource>
 </RCC>

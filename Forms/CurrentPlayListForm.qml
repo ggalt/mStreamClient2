@@ -3,8 +3,8 @@ import QtQuick.Controls 2.15
 import "../resourceElements"
 
 ScrollingListView {
-    id: playlistForm
-    objectName: "playlistForm"
+    id: currentPlaylistForm
+    objectName: "currentPlaylistForm"
 
     property color delegateBackground: "#80808080"
     property color delegatePressed: "lightgrey"
@@ -15,8 +15,8 @@ ScrollingListView {
     highlightFollowsCurrentItem: true
 
     function changeTrackIndex( idx ) {
-        playlistForm.myCurrentIndex = idx
-        myLogger.log("New Track number:", idx, "current playlist index:", playlistForm.myCurrentIndex)
+        currentPlaylistForm.myCurrentIndex = idx
+        myLogger.log("New Track number:", idx, "current playlist index:", currentPlaylistForm.myCurrentIndex)
     }
 
     myModel: currentPlayList.plModel
@@ -30,7 +30,7 @@ ScrollingListView {
     myDelegate: SwipeDelegate {
         id: playlistDelegate
         height: 87
-        width: playlistForm.width
+        width: currentPlaylistForm.width
         background: Rectangle {
             color: "transparent"
         }
@@ -108,7 +108,7 @@ ScrollingListView {
             }
             border.width: 2
             border.color: "yellow"
-            y: playlistForm.myCurrentItem.y
+            y: currentPlaylistForm.myCurrentItem.y
             Behavior on y {
                 SpringAnimation {
                     spring: 3

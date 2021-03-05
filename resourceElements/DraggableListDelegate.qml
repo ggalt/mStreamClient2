@@ -90,12 +90,14 @@ Rectangle {
     // those will never be called if we don't use Drag.active
     onDragActiveChanged: {
         if (dragActive) {
+            Drag.active = true
             print("drag started")
             originalX = x
             originalY = y
             _draggableListDelegate.state="DRAG"
-//            Drag.start();
+            //            Drag.start();
         } else {
+            Drag.active = false
             print("drag finished")
             if(!overDropZone) {
                 console.log("Not Dropped in Drop Zone")
@@ -109,7 +111,7 @@ Rectangle {
     }
 
     Drag.dragType: Drag.Automatic
-    Drag.active: _delegateMouseArea.drag.active
+//    Drag.active: _delegateMouseArea.drag.active       //this causes a binding loop on "active" so we set it manuall in "onDragActiveChanged" above
 
     ///////////////////////////////////////////////////////////////////////////////
     //// MOUSEAREA ELEMENTS
@@ -120,6 +122,7 @@ Rectangle {
         anchors.fill: parent
 
         drag.target: _draggableListDelegate
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         onPressed: {
             _delegateRect.color = delegatePressedColor
@@ -134,9 +137,12 @@ Rectangle {
 
         onPressAndHold: {
             myLogger.log("Press and hold")
-            mainApp.updatePlaylist(_draggableListDelegate.actionItem, actionCommand, "replace")
+            if(mouse.button === Qt.RightButton) {
+                mainApp.updatePlaylist(actionItem, actionCommand, "add")
+            } else {
+                mainApp.updatePlaylist(_draggableListDelegate.actionItem, actionCommand, "replace")
+            }
         }
-
     }
     states: [
         State {

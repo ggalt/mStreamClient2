@@ -71,7 +71,7 @@ ApplicationWindow {
             id: _nowPlayingNavButton
             anchors.right: parent.right
             height: parent.height
-            width: hasPlayListLoaded && mainWindow.listStackView.currentItem.objectName !== "playlistForm"? height : 0
+            width: hasPlayListLoaded && mainWindow.listStackView.currentItem.objectName !== "currentplaylistForm"? height : 0
             text: "\u21AA"
             font.pointSize: toolBar.textPointSize
 
@@ -80,7 +80,7 @@ ApplicationWindow {
                 if( appWindow.poppedItems.length > 0) {
                     var item = appWindow.poppedItems.pop()
                     myLogger.log("popped item:", item)
-                    if(item === "playlistForm") {
+                    if(item === "currentplaylistForm") {
                         mainWindow.listStackView.push( "qrc:/Forms/CurrentPlayListForm.qml" )
                     } else if(item === "albumPage") {
                         mainWindow.listStackView.push( "qrc:/Forms/AlbumListForm.qml" )
@@ -129,6 +129,10 @@ ApplicationWindow {
         id: songListJSONModel
     }
 
+    JSONListModel {
+        id: playListJSONModel
+    }
+
     MusicPlaylist {
         id: _currentPlayList
     }
@@ -156,7 +160,7 @@ ApplicationWindow {
     property bool hasPlayListLoaded: false
     property int playlistAddAt: 0
 
-    property int globalDebugLevel: 0        // 0 = critical, 1 = warn, 2 = all
+    property int globalDebugLevel: 2        // 0 = critical, 1 = warn, 2 = all
 
     property var poppedItems: []
 
@@ -247,6 +251,14 @@ ApplicationWindow {
         serverCall("/db/album-songs", JSON.stringify({ 'album' : albumName }), "POST", songRequestResp)
     }
 
+    function requestPlaylists() {
+        serverCall("/playlist/getall", '', "GET", playListRequestResp)
+    }
+
+    function requestPlayListSongs(playlistName) {
+        serverCall("/playlist/load", JSON.stringify({ 'playlistname' : playlistName }), "POST", playlistSongListRequestResponse)
+    }
+
     function artistsRequestResp(xmlhttp) {
         myLogger.log("artistRequestResp:", xmlhttp.responseText)
         artistListJSONModel.json = xmlhttp.responseText
@@ -261,6 +273,18 @@ ApplicationWindow {
         albumListJSONModel.query = "$.albums[*]"
         mainWindow.setMainWindowState("NowPlaying")
         mainWindow.listStackView.push( "qrc:/Forms/AlbumListForm.qml" )
+    }
+
+    function playListRequestResp(xmlhttp) {
+        myLogger.log("playListRequestResp:", xmlhttp.responseText.substring(1,5000))
+        playListJSONModel.json = xmlhttp.responseText
+//        playListJSONModel.query = "$.albums[*]"
+        mainWindow.setMainWindowState("NowPlaying")
+        mainWindow.listStackView.push( "qrc:/Forms/PlayListForm.qml" )
+    }
+
+    function playlistSongListRequestResponse(xmlhttp) {
+        myLogger.log("playlistSongListRequestResponse:", xmlhttp.responseText.substring(1,5000))
     }
 
     function songRequestResp(xmlhttp) {
@@ -280,6 +304,7 @@ ApplicationWindow {
             requestAlbums();
         } else if (action === "Playlists") {
             myLogger.log("Playlist Click")
+            requestPlaylists();
         }
     }
 
