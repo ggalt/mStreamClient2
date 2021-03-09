@@ -112,7 +112,14 @@ Item {
             onClicked: {
                 myLogger.log("width:", btnRewind.width)
                 ToolTip.hide()
-                mediaPlayer.startPreviousTrack()
+                myLogger.log("Rewind.  We've played for:", mediaPlayer.position)
+                if( mediaPlayer.position > 5000 ) {   // if we more than 5 seconds into song, simply return to beginning
+                    mediaPlayer.pause()
+                    mediaPlayer.seek(0)
+                    mediaPlayer.play()
+                } else {
+                    mediaPlayer.startPreviousTrack()
+                }
             }
         }
 

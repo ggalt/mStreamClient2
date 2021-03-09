@@ -121,6 +121,8 @@ Item {
                     flipped = !flipped
                     if(flipped)
                         flipTimer.start()
+                    else
+                        mainWindow.listStackView.push( "qrc:/Forms/CurrentPlayListForm.qml" )
                 }
 
                 Timer {

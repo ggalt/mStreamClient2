@@ -160,7 +160,7 @@ ApplicationWindow {
     property bool hasPlayListLoaded: false
     property int playlistAddAt: 0
 
-    property int globalDebugLevel: 2        // 0 = critical, 1 = warn, 2 = all
+    property int globalDebugLevel: 0        // 0 = critical, 1 = warn, 2 = all
 
     property var poppedItems: []
 
