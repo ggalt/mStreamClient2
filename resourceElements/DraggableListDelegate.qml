@@ -122,6 +122,7 @@ Rectangle {
         anchors.fill: parent
 
         drag.target: _draggableListDelegate
+        drag.axis: Drag.XAxis
         acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         onPressed: {
