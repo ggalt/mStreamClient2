@@ -160,12 +160,14 @@ ApplicationWindow {
     property bool hasPlayListLoaded: false
     property int playlistAddAt: 0
 
-    property int globalDebugLevel: 0        // 0 = critical, 1 = warn, 2 = all
+    property int globalDebugLevel: 2        // 0 = critical, 1 = warn, 2 = all
 
     property var poppedItems: []
 
     property alias currentPlayList: _currentPlayList
     property alias toolBarLabel: _toolBarLabel
+
+    property string apiVersion: "/api/v1"
 
     /////////////////////////////////////////////////////////////////////////////////
     /// Functions
@@ -173,7 +175,7 @@ ApplicationWindow {
 
     function sendLogin() {
         var xmlhttp = new XMLHttpRequest();
-        var url = serverURL+"/api/v1/auth/login";
+        var url = serverURL+apiVersion+"/auth/login";
         myLogger.log("URL:", url)
         xmlhttp.open("POST", url, true);
 
@@ -203,7 +205,7 @@ ApplicationWindow {
     /// serverCall: Generic function to call the mStream server
     function serverCall(reqPath, JSONval, callType, callback) {
         var xmlhttp = new XMLHttpRequest();
-        var url = serverURL+reqPath;
+        var url = serverURL+apiVersion+reqPath;
         myLogger.log("Request info:", callType, url, JSONval);
         xmlhttp.open(callType, url, true);
         xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
