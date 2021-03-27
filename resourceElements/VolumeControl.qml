@@ -62,13 +62,18 @@ Item {
         source: mute ? muteVolumeImage : volumeImage
         MouseArea {
             anchors.fill: parent
-            onPressAndHold: {
-                _volumeControl.state = "active"
-            }
+            acceptedButtons: Qt.AllButtons
+//            onPressAndHold: {
+//                _volumeControl.state = "active"
+//            }
 
             onClicked: {
-                myLogger.log("Mute Volume")
-                mute = !mute
+                if( mouse.button == Qt.RightButton ) {
+                    myLogger.log("Mute Volume")
+                    mute = !mute
+                } else {
+                    _volumeControl.state = "active"
+                }
             }
         }
     }
