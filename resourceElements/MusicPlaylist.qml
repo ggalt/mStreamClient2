@@ -117,8 +117,10 @@ JSONListModel {
         myLogger.log("Next Track -- Current Static Index is:", currentStaticIndex)
         if(currentStaticIndex >= titleCount) {
             currentStaticIndex = 0
+            isPlaying = false
             trackChange(getCurrentTrackNumber())
             if(looping) {
+                isPlaying = true
                 return true
             } else {
                 endOfList()     // emit signal that we are at the end

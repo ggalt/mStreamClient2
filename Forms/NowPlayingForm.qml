@@ -258,7 +258,9 @@ Item {
 
         function endOfPlaylist() {
             myLogger.log("Playlist ended and received by player");
-            startNextTrack()
+            if(isPlaying) {
+                startNextTrack()
+            }
         }
 
         function startPlaylist() {
