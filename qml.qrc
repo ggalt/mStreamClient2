@@ -48,5 +48,6 @@
         <file>Forms/SongListForm.qml</file>
         <file>images/mute-audio-150191_640.png</file>
         <file>Forms/PlayListForm.qml</file>
+        <file>resourceElements/LoginFailureDialog.qml</file>
     </qresource>
 </RCC>

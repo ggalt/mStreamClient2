@@ -113,6 +113,14 @@ ApplicationWindow {
 
     }
 
+    LoginFailureDialog {
+        id: loginFailureDialog
+        visible: false
+        modal: true
+        x: appWindow.width / 2 - loginFailureDialog.width / 2
+        y: appWindow.height / 2 - loginFailureDialog.height / 2
+    }
+
     /////////////////////////////////////////////////////////////////////////////////
     /// Data Structures
     /////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +204,9 @@ ApplicationWindow {
                     var resp = JSON.parse(xmlhttp.responseText)
                     myToken = resp.token
                 } else {
+                    // manage failure to login
                     myLogger.log("error: " + xmlhttp.status)
+                    loginFailureDialog.visible = true
                 }
             }
         }
