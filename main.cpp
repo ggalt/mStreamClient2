@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("georgegalt.com");
     app.setApplicationName("mStreamClient2");
 
-
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

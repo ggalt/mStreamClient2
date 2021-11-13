@@ -55,6 +55,12 @@ compile_commands.json
 *plugin_import.cpp
 /.xcode
 Debug-iphonesimulator
+Info.plist
+
+# Qt debug directories of iOS
+**/Debug-iphoneos
+**/Debug-iphonesimulator
+**/mStreamClient2.xcodeproj
 
 # General
 .DS_Store
